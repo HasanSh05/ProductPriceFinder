@@ -1,0 +1,21 @@
+# Ignore compiled classes
+/bin/
+bin/
+*.class
+
+# Ignore IDE metadata
+.settings/
+.classpath
+.project
+
+# Ignore large OCR data
+tessdata/
+
+# Ignore images
+*.png
+*.jpg
+*.jpeg
+
+# Ignore OS files
+.DS_Store
+Thumbs.db

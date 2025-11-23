@@ -1,6 +1,6 @@
 package com.app.price;
 
-public class SearchResult {
+public class SearchResult implements Comparable<SearchResult>{
 
     private String storeName;
     private String productTitle;
@@ -34,4 +34,15 @@ public class SearchResult {
     public String toString() {
         return storeName + " - " + productTitle + " - " + price + " - " + url;
     }
+    
+    @Override
+    public int compareTo(SearchResult other) {
+        if (this.price < other.price)
+            return -1;    // this is cheaper
+        else if (this.price > other.price)
+            return 1;     // this is more expensive
+        else
+            return 0;     // equal
+    }
+    
 }

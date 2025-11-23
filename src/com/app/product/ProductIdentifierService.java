@@ -2,29 +2,45 @@ package com.app.product;
 
 public class ProductIdentifierService {
 
-    /**
-     * Takes raw OCR text or barcode and returns a structured Product object.
-     */
     public Product identify(String text, String barcode) {
 
-        // CASE 1: Barcode found (stronger than OCR)
+        // If barcode exists → strong hint but we still analyze text
         if (barcode != null && !barcode.isEmpty()) {
-            return new Product("Unknown Product", null, barcode, text);
+            return new Product("Unknown Product (Barcode)", null, barcode, text);
         }
 
-        // CASE 2: OCR found text
-        if (text != null && !text.isEmpty()) {
-
-            // simple cleaning
-            String clean = text.trim().replaceAll("\\s+", " ");
-
-            // basic name extraction (longest word or full string)
-            String name = clean;
-
-            return new Product(name, null, null, text);
+        // Clean the OCR text
+        if (text != null) {
+            text = text.replaceAll("[^A-Za-z0-9 ]", "");  // keep only letters/numbers/spaces
+            text = text.toLowerCase().trim();
+        } else {
+            text = "";
         }
 
-        // CASE 3: nothing detected
-        return new Product("Unknown Product");
+        String name = "Unknown Product";
+
+        // ---------- BRAND DETECTION ----------
+        if (text.contains("iphone")) {
+            name = "iPhone";
+        }
+        if (text.contains("apple")) {
+            name = "Apple iPhone";
+        }
+        if (text.contains("samsung")) {
+            name = "Samsung";
+        }
+        if (text.contains("galaxy")) {
+            name = "Samsung Galaxy";
+        }
+
+        // ---------- MODEL NUMBER DETECTION ----------
+        for (int i = 10; i <= 30; i++) {
+            if (text.contains(String.valueOf(i))) {
+                name += " " + i;
+                break;
+            }
+        }
+
+        return new Product(name, null, null, text);
     }
 }

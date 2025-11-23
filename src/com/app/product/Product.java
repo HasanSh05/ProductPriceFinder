@@ -7,9 +7,9 @@ public class Product {
     private String barcode;
     private String rawText;
 
-    // Minimal constructor (for when we only have a name)
+    // Minimal constructor
     public Product(String name) {
-        this.name = name;
+        this(name, null, null, null);
     }
 
     // Full constructor
@@ -20,7 +20,6 @@ public class Product {
         this.rawText = rawText;
     }
 
-    // Getters
     public String getName() {
         return name;
     }
