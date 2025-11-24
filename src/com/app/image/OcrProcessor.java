@@ -1,6 +1,7 @@
 package com.app.image;
 
 import java.io.File;
+
 import net.sourceforge.tess4j.Tesseract;
 
 public class OcrProcessor implements ImageProcessor {

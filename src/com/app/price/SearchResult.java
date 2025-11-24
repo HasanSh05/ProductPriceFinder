@@ -4,7 +4,7 @@ public class SearchResult implements Comparable<SearchResult>{
 
     private String storeName;
     private String productTitle;
-    private double price;
+    private Double price;
     private String url;
 
     public SearchResult(String storeName, String productTitle, double price, String url) {
@@ -38,11 +38,11 @@ public class SearchResult implements Comparable<SearchResult>{
     @Override
     public int compareTo(SearchResult other) {
         if (this.price < other.price)
-            return -1;    // this is cheaper
+            return -1;    
         else if (this.price > other.price)
-            return 1;     // this is more expensive
+            return 1;     
         else
-            return 0;     // equal
+            return 0;  
     }
     
 }
