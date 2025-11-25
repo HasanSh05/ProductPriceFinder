@@ -2,45 +2,28 @@ package com.app.product;
 
 public class ProductIdentifierService {
 
-    public Product identify(String text, String barcode) {
+	
+	private String cleanText(String raw) {
+	    if (raw == null) return "";
+	    String clean = raw.replaceAll("[^A-Za-z0-9 ]", " ");
+	    clean = clean.trim().replaceAll("\\s+", " ");
+	    return clean.toLowerCase();
+	}
 
-        // If barcode exists → strong hint but we still analyze text
-        if (barcode != null && !barcode.isEmpty()) {
-            return new Product("Unknown Product (Barcode)", null, barcode, text);
-        }
+	public Product identify(String text, String barcode) {
 
-        // Clean the OCR text
-        if (text != null) {
-            text = text.replaceAll("[^A-Za-z0-9 ]", "");  // keep only letters/numbers/spaces
-            text = text.toLowerCase().trim();
-        } else {
-            text = "";
-        }
+	    // Barcode rule
+	    if (barcode != null && !barcode.isEmpty()) {
+	        return new Product("Product with barcode " + barcode, null, barcode, text);
+	    }
 
-        String name = "Unknown Product";
+	    // Clean OCR
+	    String clean = cleanText(text);
 
-        // ---------- BRAND DETECTION ----------
-        if (text.contains("iphone")) {
-            name = "iPhone";
-        }
-        if (text.contains("apple")) {
-            name = "Apple iPhone";
-        }
-        if (text.contains("samsung")) {
-            name = "Samsung";
-        }
-        if (text.contains("galaxy")) {
-            name = "Samsung Galaxy";
-        }
+	    // Use catalog to find closest match
+	    ProductCatalog catalog = new ProductCatalog();
+	    String bestMatch = catalog.getClosestMatch(clean);
 
-        // ---------- MODEL NUMBER DETECTION ----------
-        for (int i = 10; i <= 30; i++) {
-            if (text.contains(String.valueOf(i))) {
-                name += " " + i;
-                break;
-            }
-        }
-
-        return new Product(name, null, null, text);
-    }
+	    return new Product(bestMatch, null, null, text);
+	}
 }

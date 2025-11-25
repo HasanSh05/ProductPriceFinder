@@ -1,50 +1,31 @@
 package com.app.price;
 
-import com.app.product.Product;
-
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 public class PriceAggregator {
-    private final List<PriceSource> sources = new ArrayList<>();
 
-    public PriceAggregator(List<PriceSource> sources) {
-        if (sources != null) {
-            this.sources.addAll(sources);
-        }
-    }
-    public void addSource(PriceSource source) {
-        if (source != null) {
-            this.sources.add(source);
-        }
+    public PriceAggregator() {
+        // empty constructor
     }
 
-    public List<SearchResult> searchAll(Product product) throws Exception {
-        List<SearchResult> allResults = new ArrayList<>();
+    public SearchResult getBestPrice(List<SearchResult> results) {
 
-        if (product == null) {
-            return allResults;
-        }
-
-        for (PriceSource source : sources) {
-            List<SearchResult> results = source.search(product);
-            if (results != null && !results.isEmpty()) {
-                allResults.addAll(results);
-            }
-        }
-
-        return allResults;
-    }
-    public SearchResult findBestPrice(Product product) throws Exception {
-        List<SearchResult> all = searchAll(product);
-
-        if (all.isEmpty()) {
+        if (results == null || results.isEmpty()) {
             return null;
         }
 
-        return all.stream()
-                .min(Comparator.comparing(SearchResult::getPrice))
-                .orElse(null);
+        // remove null or zero price entries BEFORE sorting
+        results.removeIf(r -> r == null || r.getPrice() <= 0.0);
+
+        if (results.isEmpty()) return null;
+
+        // sort ascending
+        results.sort((a, b) -> Double.compare(a.getPrice(), b.getPrice()));
+
+        return results.get(0);
     }
+
+
 }

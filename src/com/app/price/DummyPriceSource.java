@@ -59,7 +59,9 @@ public class DummyPriceSource implements PriceSource {
                 String link = item.select(".s-item__link").attr("abs:href");
                 if (link.isBlank()) continue;
 
-                results.add(buildResult("eBay", title, price, "USD", link));
+              //  results.add(buildResult("eBay", title, price, "USD", link));
+                SearchResult sr = buildResult("eBay", title, price, "USD", link);
+                if (sr != null) results.add(sr);
             }
 
         } catch (IOException e) {
@@ -76,7 +78,9 @@ public class DummyPriceSource implements PriceSource {
 
         try {
             String encoded = URLEncoder.encode(query, StandardCharsets.UTF_8);
-            String url = "https://www.amazon.com" + encoded;
+           // String url = "https://www.amazon.com" + encoded;
+            String url = "https://www.amazon.com/s?k=" + encoded;
+
 
             Document doc = Jsoup.connect(url)
                     .userAgent(USER_AGENT)
@@ -102,7 +106,11 @@ public class DummyPriceSource implements PriceSource {
                 String link = item.select("h2 a").attr("abs:href");
                 if (link.isBlank()) continue;
 
-                results.add(buildResult("Amazon", title, price, "USD", link));
+               // results.add(buildResult("Amazon", title, price, "USD", link));
+                
+                SearchResult sr = buildResult("Amazon", title, price, "USD", link);
+                if (sr != null) results.add(sr);
+
             }
 
         } catch (IOException e) {
@@ -155,7 +163,9 @@ private List<SearchResult> searchWalmart(String query) {
             String link = linkEl.attr("abs:href");
             if (link.isBlank()) continue;
 
-            results.add(buildResult("Walmart", title, price, "USD", link));
+            //results.add(buildResult("Walmart", title, price, "USD", link));
+            SearchResult sr = buildResult("Walmart", title, price, "USD", link);
+            if (sr != null) results.add(sr);
         }
 
     } catch (IOException e) {
@@ -167,18 +177,34 @@ private List<SearchResult> searchWalmart(String query) {
 
 //helper 
 
-private SearchResult buildResult(String store,
-                                 String title,
-                                 BigDecimal price,
-                                 String currency,
-                                 String url) {
-    SearchResult sr = new SearchResult();
+//private SearchResult buildResult(String store,
+//                                 String title,
+//                                 BigDecimal price,
+//                                 String currency,
+//                                 String url) {
+//    SearchResult sr = new SearchResult();
+//
+//    sr.getStoreName(title);
+//    sr.getPrice(price);
+//    sr.getUrl(url);
+//    return sr;
+//}
 
-    sr.getStoreName(title);
-    sr.getPrice(price);
-    sr.getUrl(url);
-    return sr;
+private SearchResult buildResult(String store,
+        String title,
+        BigDecimal price,
+        String currency,
+        String url) {
+	 if (price == null) return null; // don't build invalid result
+SearchResult sr = new SearchResult();
+sr.setStoreName(store);
+sr.setProductTitle(title);
+sr.setPrice(price.doubleValue());
+sr.setUrl(url);
+
+return sr;
 }
+
 
 private BigDecimal parsePrice(String priceText) {
     if (priceText == null) return null;

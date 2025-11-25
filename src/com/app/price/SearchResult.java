@@ -4,7 +4,7 @@ public class SearchResult implements Comparable<SearchResult>{
 
     private String storeName;
     private String productTitle;
-    private Double price;
+    private double price;
     private String url;
 
     public SearchResult(String storeName, String productTitle, double price, String url) {
@@ -44,5 +44,22 @@ public class SearchResult implements Comparable<SearchResult>{
         else
             return 0;  
     }
-    
+
+	public void setStoreName(String store) { 
+		this.storeName = store;
+	}
+	public void setProductTitle(String title) { 
+		this.productTitle = title;
+	}
+	public void setPrice(double price) {
+	    this.price = price;
+	}
+
+	public void setUrl(String url2) {
+		this.url = url2;
+	}
+
+	 public SearchResult() {
+	        // Empty constructor (useful for setters)
+	    }
 }

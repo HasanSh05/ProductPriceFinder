@@ -1,6 +1,7 @@
 package com.app.ui;
 
 import com.app.image.BarcodeProcessor;
+
 import com.app.image.OcrProcessor;
 import com.app.product.Product;
 import com.app.product.ProductIdentifierService;
@@ -76,6 +77,7 @@ public class App {
         
      // Phase 5: Find the best (cheapest) price
         PriceAggregator aggregator = new PriceAggregator();
+        
 
         SearchResult best = aggregator.getBestPrice(allResults);
 
