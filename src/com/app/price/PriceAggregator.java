@@ -17,7 +17,7 @@ public class PriceAggregator {
         }
 
         // remove null or zero price entries BEFORE sorting
-        results.removeIf(r -> r == null || r.getPrice() <= 0.0);
+        results.removeIf(r -> r == null || r.getPrice() <= 100.0);
 
         if (results.isEmpty()) return null;
 
